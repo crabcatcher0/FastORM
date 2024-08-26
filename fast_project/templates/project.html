@@ -1,0 +1,68 @@
+{% include "base.html" %}
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <h5>Overview</h5>
+        <div class="col-md-3">
+            <div>
+                <a href="#student-management-system" class="d-block py-2 text-white">Student Management System</a>
+                <a href="#student-enrollment" class="d-block py-2 text-white">Student Enrollment</a>
+                <a href="#course-registration" class="d-block py-2 text-white">Course Registration</a>
+            </div>
+        </div>
+        
+        <div class="col-md-9">
+            <h2 id="student-management-system" class="mb-4" style="font-weight: bold;">Student Management System</h2>
+            
+            <p>
+                For context, we're building a Student Management System for a university.
+                This system handles various aspects of student data, including enrollment,
+                courses, grades, and more. 
+                The system uses <a href="https://github.com/crabcatcher0/sql_Crab" style="text-decoration: none;">sql_Crab(ORM)</a> to interact with the database, simplifying complex queries and operations without the need to write raw SQL.
+            </p>
+            <div class="d-flex justify-content-end mb-4">
+                <a href="/student" class="btn btn-success">Skip & View Implementation</a>
+            </div>
+        
+            <h3 id="student-enrollment" class="mt-5" style="font-weight: bold;">Use Case: Managing Student Records</h3>
+            
+            <h4 class="mt-4">1. Student Enrollment</h4>
+            <p>
+                When a new student enrolls, their information is added to the system, including their name, date of birth, address, and contact details. 
+                The ORM maps this data to the <code>Student</code> table in the database, making it easy to add new students and retrieve their information later.
+            </p>
+            <pre>
+            <code>
+            # Example
+            class Student(Crabmodel):
+                _column = {    
+                    'first_name': DataTypes.varchar(max_length=20),
+                    'last_name': DataTypes.varchar(max_length=20),
+                    'address': DataTypes.varchar(max_length=30),
+                    'email': DataTypes.emailfield(unique=True)
+                }
+            </code>
+            </pre>
+            
+            <h4 id="course-registration" class="mt-4">2. Course Registration</h4>
+            <p>
+                Students can register for courses each semester.
+                The ORM handles the relationships between students and the courses they are enrolled in, 
+                allowing easy retrieval of a student's course list or all students registered for a
+                particular course.
+            </p>
+            <pre>
+            <code>
+            # Example
+            class Course(Crabmodel):
+                _column = {
+                    'course_name': DataTypes.varchar(max_length=100),
+                    'course_code': DataTypes.varchar(max_length=10)
+                }
+
+            </code>
+            </pre>
+        </div>
+    </div>
+</div>
+{% endblock %}
