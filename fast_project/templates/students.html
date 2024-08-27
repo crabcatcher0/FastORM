@@ -2,6 +2,7 @@
 {% block content %}
 <div class="container py-5">
     <h2 class="mb-4" style="font-weight: bold;">Student Records</h2>
+    <a class="btn btn-success mb-4" href="/add_student">Add Student</a>
     <p>
         The table displays a list of students currently enrolled in the system. 
         Each student's first name, last name, address, and email have been retrieved from 
@@ -19,34 +20,20 @@
             </tr>
         </thead>
         <tbody>
+            {% for student in students %}
             <tr>
-                <td>John</td>
-                <td>Doe</td>
-                <td>123 Main St, Anytown</td>
-                <td>johndoe@example.com</td>
+                <td>{{ student.first_name }}</td>
+                <td>{{ student.last_name }}</td>
+                <td>{{ student.address }}</td>
+                <td>{{ student.email }}</td>
             </tr>
-            <tr>
-                <td>Jane</td>
-                <td>Smith</td>
-                <td>456 Oak St, Anytown</td>
-                <td>janesmith@example.com</td>
-            </tr>
-            <tr>
-                <td>Emily</td>
-                <td>Johnson</td>
-                <td>789 Maple St, Anytown</td>
-                <td>emilyj@example.com</td>
-            </tr>
-            <tr>
-                <td>Michael</td>
-                <td>Brown</td>
-                <td>101 Pine St, Anytown</td>
-                <td>michaelb@example.com</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 
     <h2 class="mt-5 mb-4" style="font-weight: bold;">Course Information</h2>
+    <a class="btn btn-success mb-4" href="/add_course">Add Course</a>
+
     <p>
         The table shows the courses offered and the number of students 
         currently enrolled in each course.
@@ -64,26 +51,13 @@
             </tr>
         </thead>
         <tbody>
+            {% for course in courses %}
             <tr>
-                <td>Introduction to Computer Science</td>
-                <td>CS101</td>
+                <td>{{ course.course_name }}</td>
+                <td>{{ course.course_code }}</td>
                 <td>50</td>
             </tr>
-            <tr>
-                <td>Data Structures and Algorithms</td>
-                <td>CS102</td>
-                <td>45</td>
-            </tr>
-            <tr>
-                <td>Database Management Systems</td>
-                <td>CS103</td>
-                <td>40</td>
-            </tr>
-            <tr>
-                <td>Operating Systems</td>
-                <td>CS104</td>
-                <td>35</td>
-            </tr>
+            {% endfor %}
         </tbody>
     </table>
 </div>
