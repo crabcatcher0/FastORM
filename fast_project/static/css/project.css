@@ -1,0 +1,16 @@
+.product-card {
+    display: block !important;
+    text-decoration: none !important;
+    color: inherit !important;
+    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+}
+
+.product-card:hover {
+    transform: scale(1.05) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
+    color: aqua !important;
+}
+
+.card-body {
+    padding: 1rem !important;
+}

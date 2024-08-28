@@ -1,68 +1,47 @@
-{% include "base.html" %}
-{% block content %}
-<div class="container py-5">
-    <div class="row">
-        <h5>Overview</h5>
-        <div class="col-md-3">
-            <div>
-                <a href="#student-management-system" class="d-block py-2 text-white">Student Management System</a>
-                <a href="#student-enrollment" class="d-block py-2 text-white">Student Enrollment</a>
-                <a href="#course-registration" class="d-block py-2 text-white">Course Registration</a>
-            </div>
-        </div>
-        
-        <div class="col-md-9">
-            <h2 id="student-management-system" class="mb-4" style="font-weight: bold;">Student Management System</h2>
-            
-            <p>
-                For context, we're building a Student Management System for a university.
-                This system handles various aspects of student data, including enrollment,
-                courses, grades, and more. 
-                The system uses <a href="https://github.com/crabcatcher0/sql_Crab" style="text-decoration: none;">sql_Crab(ORM)</a> to interact with the database, simplifying complex queries and operations without the need to write raw SQL.
-            </p>
-            <div class="d-flex justify-content-end mb-4">
-                <a href="/student" class="btn btn-success">Skip & View Implementation</a>
-            </div>
-        
-            <h3 id="student-enrollment" class="mt-5" style="font-weight: bold;">Use Case: Managing Student Records</h3>
-            
-            <h4 class="mt-4">1. Student Enrollment</h4>
-            <p>
-                When a new student enrolls, their information is added to the system, including their name, date of birth, address, and contact details. 
-                The ORM maps this data to the <code>Student</code> table in the database, making it easy to add new students and retrieve their information later.
-            </p>
-            <pre>
-            <code>
-            # Example
-            class Student(Crabmodel):
-                _column = {    
-                    'first_name': DataTypes.varchar(max_length=20),
-                    'last_name': DataTypes.varchar(max_length=20),
-                    'address': DataTypes.varchar(max_length=30),
-                    'email': DataTypes.emailfield(unique=True)
-                }
-            </code>
-            </pre>
-            
-            <h4 id="course-registration" class="mt-4">2. Course Registration</h4>
-            <p>
-                Students can register for courses each semester.
-                The ORM handles the relationships between students and the courses they are enrolled in, 
-                allowing easy retrieval of a student's course list or all students registered for a
-                particular course.
-            </p>
-            <pre>
-            <code>
-            # Example
-            class Course(Crabmodel):
-                _column = {
-                    'course_name': DataTypes.varchar(max_length=100),
-                    'course_code': DataTypes.varchar(max_length=10)
-                }
+{% extends "base.html" %}
 
-            </code>
-            </pre>
+{% block content %}
+
+<section class="hero bg-dark text-light text-center py-5">
+    <div class="container py-5">
+        <h3 class="display-6" style="font-weight: bold;">
+            Customer Feedback System
+        </h3>
+        <p class="mx-auto text-left" style="max-width: 800px; font-size: 18px; color: #dee2e6;">
+            Your opinion matters! We are committed to improving our services 
+            and your feedback helps us achieve that.
+        </p>
+        <form action="#" method="GET" class="d-flex justify-content-center">
+            <input type="text" name="query" class="form-control me-2" placeholder="Search for products..." aria-label="Search" style="max-width: 500px; width: 100%;">
+            <button type="submit" class="btn btn-success">Search</button>
+        </form>
+    </div>
+</section>
+
+<section class="products py-3 bg-dark text-light">
+    <div class="container">
+        <h2 class="text-center mb-4">View By Products</h2>
+        <a href="add-product-form" class="btn btn-success mb-2">Add Product</a>
+        <div class="row">
+            {% set counter = 0 %}
+            {% for product in products %}
+                {% if counter % 5 == 0 and counter != 0 %}
+                    </div><div class="row">
+                {% endif %}
+                <div class="col-md-4 mb-3">
+                    <a href="/product/{{ product.id }}" class="text-decoration-none">
+                        <div class="list-group">
+                            <div class="list-group-item mb-2" style="background-color: #e9ecef; color: #000; border: none; border-radius: 0;">
+                                <h5 class="mb-1" style="font-size: 18px;">{{ product.title }}</h5>
+                                <h6 class="mb-1" style="color: #6c757d;">{{ product.made_by }}</h6>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+                {% set counter = counter + 1 %}
+            {% endfor %}
         </div>
     </div>
-</div>
+</section>
+
 {% endblock %}

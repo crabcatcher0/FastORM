@@ -1,0 +1,14 @@
+{% include "base.html" %}
+{% block content %}
+<form method="POST" action="/add_product" class="container py-5">
+    <div class="mb-3">
+        <label for="title" class="form-label">Product Title</label>
+        <input type="text" class="form-control" id="title" name="title" placeholder="Enter product title" required>
+    </div>
+    <div class="mb-3">
+        <label for="made_by" class="form-label">Made By</label>
+        <input type="text" class="form-control" id="made_by" name="made_by" placeholder="Enter maker's name" required>
+    </div>
+    <button type="submit" class="btn btn-primary">Add Product</button>
+</form>
+{% endblock %}

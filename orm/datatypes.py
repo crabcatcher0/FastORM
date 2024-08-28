@@ -1,13 +1,12 @@
-"""
-    : Datatypes
-"""
-
-
 class DataTypes:
+    """
+    : Datatypes
+    """    
     
     @staticmethod
-    def varchar(max_length=255):
-        return f'VARCHAR({max_length}) NOT NULL'
+    def varchar(max_length=255, unique=False):
+        unique_const = "UNIQUE" if unique else ""
+        return f'VARCHAR({max_length}) NOT NULL {unique_const}'.strip()
 
 
     @staticmethod
@@ -32,6 +31,13 @@ class DataTypes:
     def datetimefield(auto_add_now=True):
         if auto_add_now:
             return  'DATETIME DEFAULT CURRENT_TIMESTAMP'
+        
+        
+    @staticmethod
+    def imagefield():
+        return "BLOB"
+    
+    
         
 
 
