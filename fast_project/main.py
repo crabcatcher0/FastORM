@@ -41,16 +41,19 @@ def student_data():
         fields=('id', 'first_name', 'last_name', 'address', 'email')
     )
 
+    enrolled_std = len(student_data)
+
     course_data = courseserializer(
         model='course',
         fields=('course_name', 'course_code')
     )
-    # return {'student_data': student_data, 'course_data': course_data}
+    # return {'student_data': student_data, 'course_data': course_data} #serialized form
     
     template = env.get_template('students.html')
     return HTMLResponse(content=template.render(
         students=student_data,
-        courses=course_data)
+        courses=course_data,
+        total_students=enrolled_std)
     )
 
 
@@ -117,3 +120,5 @@ def adding_course(
 @app.get("/success")
 def success():
     return HTMLResponse(content="<h1>Student added successfully!</h1>")
+
+

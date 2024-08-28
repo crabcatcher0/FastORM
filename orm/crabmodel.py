@@ -5,11 +5,15 @@ from .settings import DATABASE_NAME
 
 class CrabModel:
     """
-        : Creates table with auto incremented id column.
+    :: Base class for creating database tables with auto-incremented primary keys.
+    - Automatically creates a table with a primary key column named 'id' that auto-increments.
+    - Foreign Keys are if given it creates the table with it too.
+    - Checks if the table already exists if it exist it skips creation.
+    - Constructs the column and optional foreign key constraints.
     """
-    
+
     @classmethod
-    def table(cls, table_name: str, column: dict):
+    def table(cls, table_name: str, column: dict, foreign_keys:list = None):
         database_name = DATABASE_NAME
         conn = sqlite3.connect(database_name)
         cursor = conn.cursor()
@@ -23,11 +27,16 @@ class CrabModel:
             print(f"Table '{table_name}' already exists. Skipping...")
         else:
             colmn_def = ", ".join([f"{col} {dtype}" for col, dtype in column.items()])
+
+            fk_constraints = ""
+            if foreign_keys:
+                fk_constraints = ", " + ", ".join(foreign_keys)
             try:
                 cursor.execute(f"""
                     CREATE TABLE {table_name} (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
                     {colmn_def}
+                    {fk_constraints}
                     );
                 """)
                 print(f"Table '{table_name}' created.\nColumn: {', '.join(column.keys())} created.")
@@ -135,7 +144,6 @@ class CrabModel:
 
 
 
-
     @classmethod
     def __init_subclass__(cls, **kwargs):
         super().__init_subclass__(**kwargs)
@@ -148,8 +156,17 @@ class CrabModel:
         )
 
 
-
-       
-
-
+class ForeignKey:
+    """
+    Utility class for creating foreign key constraints in table definitions.
+    - create_foreignkey(field_name: str, referenced_table: str):
+        generates a foreign key constraint for a column.
+    - parameters:
+        - field_name (str): name of the column in the current table that will be a foreign key.
+        - model (str): the name of the table that contains the primary key being referenced.
+    """
+    
+    @staticmethod
+    def create_foreignkey(field_name: str, model: str):
+        return f"FOREIGN KEY ({field_name}) REFERENCES {model}(id)"
 
