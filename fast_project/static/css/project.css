@@ -1,16 +1,19 @@
-.product-card {
-    display: block !important;
-    text-decoration: none !important;
-    color: inherit !important;
-    transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+.list-group-item {
+    transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.product-card:hover {
-    transform: scale(1.05) !important;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2) !important;
-    color: aqua !important;
+.list-group-item:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 16px rgba(184, 183, 183, 0.2);
+    background-color: #f8f9fa; 
 }
 
-.card-body {
-    padding: 1rem !important;
+.list-group-item h5,
+.list-group-item h6 {
+    transition: color 0.3s ease;
+}
+
+.list-group-item:hover h5,
+.list-group-item:hover h6 {
+    color: #343a40;
 }

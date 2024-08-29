@@ -1,0 +1,38 @@
+{% include "base.html" %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-md-8 mx-auto">
+            <div class="card mb-4">
+                <div class="card-body">
+                    <h4 class="card-title text-center">Product Name: {{ product.title }}</h4>
+                    <h5 class="text-muted text-center">Company: {{ product.made_by }}</h5>
+                    <p class="text-center mt-3">{{ product.description }}</p>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h4 class="mb-0">Reviews</h4>
+                </div>
+                <div class="card-body">
+                    {% if reviews %}
+                        {% for review in reviews %}
+                            <div class="mb-3">
+                                <h5>{{ review.user_name }}</h5>
+                                <p class="mb-1">{{ review.comment }}</p>
+                                <small class="text-muted">Rating: {{ review.rating }}/5</small>
+                                <hr>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No reviews yet. Be the first to review this product!</p>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

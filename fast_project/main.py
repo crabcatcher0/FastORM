@@ -1,12 +1,13 @@
 from fastapi import FastAPI, Form, HTTPException
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.responses import HTMLResponse
 from .templating import env
 from .models import Product
-from .serializer import productserializer
+from .serializer import productserializer, oneserializer
 
 app = FastAPI()
-# app.mount("/static", StaticFiles(directory="static"), name="static")
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 
@@ -35,6 +36,7 @@ def add_product_form():
     return HTMLResponse(content=template.render())
 
 
+
 @app.post("/add_product")
 def add_product(title: str = Form(...), made_by: str = Form(...)):
     if title and made_by:
@@ -48,6 +50,15 @@ def add_product(title: str = Form(...), made_by: str = Form(...)):
         raise HTTPException(status_code=400, detail="Title and Made By fields are required")
 
 
+@app.get("/crm/{id}")
+def detail_prod(id: int):
+    data = oneserializer(
+        model='product',
+        fields=('title', 'made_by'),
+        pk=id
+    )
+    template = env.get_template('product_detail.html')
+    return HTMLResponse(content=template.render(product = data))
 
 
 @app.get("/success")
