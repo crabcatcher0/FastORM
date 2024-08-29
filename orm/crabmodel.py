@@ -143,6 +143,7 @@ class CrabModel:
             conn.close()
 
 
+    
 
     @classmethod
     def __init_subclass__(cls, **kwargs):

@@ -1,10 +1,14 @@
-from fastapi import FastAPI, Form, HTTPException
+from fastapi import FastAPI, Form, HTTPException, status, Query
+from datetime import timedelta
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse
 from fastapi.responses import HTMLResponse
 from .templating import env
-from .models import Product
+from .models import Product, User
 from .serializer import productserializer, oneserializer
+from .fast_utils import search_products
+
+
 
 app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
@@ -61,8 +65,35 @@ def detail_prod(id: int):
     return HTMLResponse(content=template.render(product = data))
 
 
+@app.get("/register-form")
+def register_form():
+    template = env.get_template('register.html')
+    return HTMLResponse(content=template.render())
+
+
+
+@app.get("/login-form")
+def login_form():
+    template = env.get_template('login.html')
+    return HTMLResponse(content=template.render())
+
+
+
+@app.get("/profile")
+def profile():
+    template = env.get_template('profile.html')
+    return HTMLResponse(content=template.render())
+
+
+
+@app.get("/search/")
+def search_query(query: str = Query(..., min_length=1, max_length=100)):
+    results = search_products(query)
+    return {"results": results}
+
+
+
 @app.get("/success")
 def success():
     return HTMLResponse(content="<h1>Student added successfully!</h1>")
-
 

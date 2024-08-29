@@ -14,7 +14,9 @@ venv/
 # Distribution / packaging
 .Python
 build/
+auth/
 develop-eggs/
+secretes.py
 dist/
 downloads/
 eggs/
