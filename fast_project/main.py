@@ -10,6 +10,7 @@ from .auth.utils import get_password_hash, verify_password
 from .auth.jwt_handlers import create_access_token, get_current_user
 from .auth.decorators import login_required
 import logging
+from typing import List
 
 
 app = FastAPI()
@@ -18,7 +19,7 @@ app.mount("/static", StaticFiles(directory="static"), name="static")
 
 
 @app.get("/")
-def root():
+async def root():
     """
         Homepage
     """
@@ -27,7 +28,7 @@ def root():
 
 
 @app.get("/crm")
-def projecct():
+async def projecct():
     product = productserializer(
         model= 'product',
         fields=('id', 'title', 'made_by')
@@ -37,14 +38,14 @@ def projecct():
 
 
 @app.get("/add-product-form")
-def add_product_form():
+async def add_product_form():
     template = env.get_template('add_product.html')
     return HTMLResponse(content=template.render())
 
 
 
 @app.post("/add_product")
-def add_product(title: str = Form(...), made_by: str = Form(...)):
+async def add_product(title: str = Form(...), made_by: str = Form(...)):
     if title and made_by:
         data = {
             'title': title,
@@ -57,7 +58,7 @@ def add_product(title: str = Form(...), made_by: str = Form(...)):
 
 
 @app.get("/crm/{id}")
-def detail_prod(id: int):
+async def detail_prod(id: int):
     data = oneserializer(
         model='product',
         fields=('title', 'made_by'),
@@ -87,7 +88,7 @@ async def register(
 
 
 @app.get("/register-form")
-def register_form():
+async def register_form():
     template = env.get_template('register.html')
     return HTMLResponse(content=template.render())
 
@@ -112,7 +113,7 @@ async def login(email: str = Form(...), password: str = Form(...)):
 
 
 @app.get("/login-form")
-def login_form():
+async def login_form():
     template = env.get_template('login.html')
     return HTMLResponse(content=template.render())
 
@@ -140,9 +141,16 @@ async def profile(request: Request, current_user: User = Depends(get_current_use
 
 
 @app.get("/search/")
-async def search_query(query: str = Query(..., min_length=1, max_length=100)):
+async def search_query(request: Request, query: str = Query(..., min_length=1, max_length=100)):
     results = search_products(query)
-    return {"results": results}
+    if query.isdigit():
+        raise HTTPException(status_code=400, detail="Search query should not be a numeric ID")
+    
+    result_list = [{"id": result["id"], "title": result["title"],"made_by": result["made_by"]} for result in results]
+    return HTMLResponse(
+        content=env.get_template('search_result.html').render(query=query, results=result_list)
+    )
+
 
 
 

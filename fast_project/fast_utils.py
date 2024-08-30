@@ -3,7 +3,7 @@ from .serializer import productserializer
 def search_products(query: str):
     products = productserializer(
         model='product',
-        fields=('title', 'made_by')
+        fields=('id', 'title', 'made_by')
     )
     
     filtered_products = [

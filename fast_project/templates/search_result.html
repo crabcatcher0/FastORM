@@ -1,0 +1,28 @@
+{% include "base.html" %}
+{% block content %}
+
+<section class="products py-5 bg-dark text-light">
+<div class="container">
+    <h2 class="text-center mb-4">Search Results for "{{ query }}":</h2>
+        {% if results %}
+        <div class="row">
+            {% for result in results %}
+            <div class="col-md-4 mb-3">
+                <a href="/crm/{{ result.id }}" class="text-decoration-none">
+                    <div class="list-group">
+                        <div class="list-group-item mb-2" style="background-color: #e9ecef; color: #000; border: none; border-radius: 0;">
+                            <h5 class="mb-1" style="font-size: 18px;">{{ result.title }}</h5>
+                            <h6 class="mb-1" style="color: #6c757d;">{{ result.made_by }}</h6>
+                        </div>
+                    </div>
+                </a>
+            </div>
+            {% endfor %}
+        </div>
+        {% else %}
+        <p class="text-center">Sorry, no results found. Please go back.</p>
+        {% endif %}
+    </div>
+</section>
+
+{% endblock %}
