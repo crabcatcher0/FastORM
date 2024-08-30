@@ -143,6 +143,22 @@ class CrabModel:
             conn.close()
 
 
+
+    @classmethod
+    def get_data(cls, **kwargs):
+        conn = sqlite3.connect(DATABASE_NAME)
+        cursor = conn.cursor()
+        column, value = list(kwargs.items())[0]
+        query = f"SELECT * FROM {cls.table_name} WHERE {column} = ?"
+        cursor.execute(query, (value,))
+        row = cursor.fetchone()
+        conn.close()
+        if row:
+            return cls(*row)
+        return None
+
+
+
     
 
     @classmethod
