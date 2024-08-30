@@ -15,6 +15,7 @@ venv/
 .Python
 build/
 secretes.py
+fast_project/auth/secrete.py
 secrete.py
 # auth/
 develop-eggs/
