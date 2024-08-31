@@ -148,14 +148,31 @@ class CrabModel:
     def get_data(cls, **kwargs):
         conn = sqlite3.connect(DATABASE_NAME)
         cursor = conn.cursor()
+
         column, value = list(kwargs.items())[0]
+        
         query = f"SELECT * FROM {cls.table_name} WHERE {column} = ?"
         cursor.execute(query, (value,))
         row = cursor.fetchone()
         conn.close()
+
         if row:
             return cls(*row)
         return None
+    
+
+    @staticmethod
+    def filter_data(model: str, field: str, value):
+        conn = sqlite3.connect(DATABASE_NAME)
+        cursor = conn.cursor()
+    
+        query = f"SELECT * FROM {model} WHERE {field} = ?"
+        cursor.execute(query, (value,))
+        
+        rows = cursor.fetchall()
+        conn.close()
+    
+        return rows
 
 
 
@@ -184,6 +201,6 @@ class ForeignKey:
     """
     
     @staticmethod
-    def create_foreignkey(field_name: str, model: str):
-        return f"FOREIGN KEY ({field_name}) REFERENCES {model}(id)"
+    def create_foreignkey(field_name: str, ref_model: str, ref_col: str):
+        return f"FOREIGN KEY ({field_name}) REFERENCES {ref_model}({ref_col})"
 

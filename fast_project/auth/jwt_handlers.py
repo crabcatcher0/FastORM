@@ -53,3 +53,12 @@ def get_current_user(request: Request):
         return user
     except PyJWTError:
         raise HTTPException(status_code=401, detail="Unauthorized")
+    
+
+def get_email_from_token(token: str):
+    try:
+        token = token.replace("Bearer ", "")
+        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
+        return payload.get("sub") 
+    except PyJWTError:
+        return None

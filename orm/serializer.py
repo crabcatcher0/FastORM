@@ -1,4 +1,6 @@
 from .get_data import GetData
+from .crabmodel import CrabModel
+import json
 
 """
 
@@ -26,6 +28,18 @@ class Serializer:
         data = GetData.get_one_or_404(model, fields, pk=pk)
         result = dict(zip(fields, data))
         return result
+    
+
+    @staticmethod
+    def filter_data_serialized(model: str, field: str, value):
+        data = CrabModel.filter_data(model=model, field=field, value=value)
+        zipped = [dict(zip(field, rev)) for rev in data]
+        return zipped
+
+
+
+
+
         
 
 

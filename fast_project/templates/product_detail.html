@@ -6,8 +6,8 @@
         <div class="col-md-8 mx-auto">
             <div class="card mb-4">
                 <div class="card-body">
-                    <h4 class="card-title text-center">Product Name: {{ product.title }}</h4>
-                    <h5 class="text-muted text-center">Company: {{ product.made_by }}</h5>
+                    <h4 class="card-title text-left" style="font-size: 20px;">Product Name: {{ product.title }}</h4>
+                    <h5 class="text-muted text-left" style="font-size: 16px;">Company: {{ product.made_by }}</h5>
                     <p class="text-center mt-3">{{ product.description }}</p>
                 </div>
             </div>
@@ -15,14 +15,16 @@
             <div class="card">
                 <div class="card-header">
                     <h4 class="mb-0">Reviews</h4>
+
                 </div>
                 <div class="card-body">
+                    <a href="/review-form?product_id={{ product.id }}" class="btn btn-primary">Post Review</a>
+
                     {% if reviews %}
                         {% for review in reviews %}
-                            <div class="mb-3">
-                                <h5>{{ review.user_name }}</h5>
-                                <p class="mb-1">{{ review.comment }}</p>
-                                <small class="text-muted">Rating: {{ review.rating }}/5</small>
+                            <div class="mb-3 mt-3">
+                                <h5>{{ review.comments }}</h5>
+                                <p class="mb-1">{{ review.review_by }}</p>
                                 <hr>
                             </div>
                         {% endfor %}

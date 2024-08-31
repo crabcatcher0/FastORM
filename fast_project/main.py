@@ -3,14 +3,13 @@ from datetime import timedelta
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from .templating import env
-from .models import Product, User
+from .models import Product, User, Review
 from .serializer import productserializer, oneserializer
 from .fast_utils import search_products
 from .auth.utils import get_password_hash, verify_password
-from .auth.jwt_handlers import create_access_token, get_current_user
+from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token
 from .auth.decorators import login_required
 import logging
-from typing import List
 
 
 app = FastAPI()
@@ -61,9 +60,10 @@ async def add_product(title: str = Form(...), made_by: str = Form(...)):
 async def detail_prod(id: int):
     data = oneserializer(
         model='product',
-        fields=('title', 'made_by'),
+        fields=('id', 'title', 'made_by'),
         pk=id
     )
+    
     template = env.get_template('product_detail.html')
     return HTMLResponse(content=template.render(product = data))
 
@@ -107,7 +107,7 @@ async def login(email: str = Form(...), password: str = Form(...)):
     
     access_token = create_access_token(data={"sub": user.email})
     response = RedirectResponse("/profile", status_code=303)
-    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True)
+    response.set_cookie(key="access_token", value=f"Bearer {access_token}", httponly=True, secure=True)
 
     return response
 
@@ -150,6 +150,42 @@ async def search_query(request: Request, query: str = Query(..., min_length=1, m
     return HTMLResponse(
         content=env.get_template('search_result.html').render(query=query, results=result_list)
     )
+
+
+@app.get("/review-form")
+async def review_form(
+    request: Request,  
+    product_id: int = Query(None, description="ID of the product")
+    ):
+    template = env.get_template('add_review.html')
+    return HTMLResponse(content=template.render({"request": request, "product_id": product_id}))
+
+
+@app.post("/review")
+async def review(request: Request, comments: str = Form(...)):
+    prods = productserializer('product', ('id', 'title'))
+    ss = {'data':prods}
+
+    for pk in ss["data"]:
+        result = pk['id']
+
+
+    token = request.cookies.get('access_token')
+    if not token:
+        raise HTTPException(status_code=401, detail="Access token is missing")
+
+    email = get_email_from_token(token)
+    if not email:
+        raise HTTPException(status_code=401, detail="Invalid token or email not found")
+
+    data = {
+        'review_by' : email,
+        'in_product' : result,
+        'comments': comments
+    }
+    Review.add_data(data)
+    
+    return RedirectResponse("/success", status_code=303)
 
 
 

@@ -1,4 +1,5 @@
 from .serializer import productserializer
+from fastapi.requests import Request
 
 def search_products(query: str):
     products = productserializer(
@@ -11,3 +12,5 @@ def search_products(query: str):
         if query.lower() in product["title"].lower() or query.lower() in product["made_by"].lower()
     ]
     return filtered_products
+
+

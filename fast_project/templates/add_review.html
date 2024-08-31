@@ -1,0 +1,12 @@
+{% include "base.html" %}
+
+{% block content %}
+<form method="POST" action="/review" class="container py-5">
+    <div class="mb-3">
+        <label for="comments" class="form-label">Review</label>
+        <textarea class="form-control" id="comments" name="comments" rows="4" 
+        placeholder="Please give your honest review..." required></textarea>
+    </div>
+    <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+{% endblock %}
