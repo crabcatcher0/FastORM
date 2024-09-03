@@ -4,12 +4,13 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from .templating import env
 from .models import Product, User, Review
-from .serializer import productserializer, oneserializer
+from .serializer import productserializer, oneserializer, reviewserializere
 from .fast_utils import search_products
 from .auth.utils import get_password_hash, verify_password
 from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token
 from .auth.decorators import login_required
 import logging
+from orm.get_data import GetData
 
 
 app = FastAPI()
@@ -63,9 +64,9 @@ async def detail_prod(id: int):
         fields=('id', 'title', 'made_by'),
         pk=id
     )
-    
+    review_data = Review.rev_prod()
     template = env.get_template('product_detail.html')
-    return HTMLResponse(content=template.render(product = data))
+    return HTMLResponse(content=template.render(product = data, reviews = review_data))
 
 
 
@@ -168,7 +169,6 @@ async def review(request: Request, comments: str = Form(...)):
 
     for pk in ss["data"]:
         result = pk['id']
-
 
     token = request.cookies.get('access_token')
     if not token:
