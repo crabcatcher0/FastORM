@@ -64,7 +64,7 @@ async def detail_prod(id: int):
         fields=('id', 'title', 'made_by'),
         pk=id
     )
-    review_data = Review.rev_prod()
+    review_data = Review.filter_data('review', 'in_product', value=id)    
     template = env.get_template('product_detail.html')
     return HTMLResponse(content=template.render(product = data, reviews = review_data))
 

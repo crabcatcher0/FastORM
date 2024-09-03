@@ -1,6 +1,6 @@
 import sqlite3
 from .settings import DATABASE_NAME
-
+import json
 
 
 class CrabModel:
@@ -165,16 +165,18 @@ class CrabModel:
     def filter_data(model: str, field: str, value):
         conn = sqlite3.connect(DATABASE_NAME)
         cursor = conn.cursor()
-    
+        
         query = f"SELECT * FROM {model} WHERE {field} = ?"
         cursor.execute(query, (value,))
         
         rows = cursor.fetchall()
+        columns = [desc[0] for desc in cursor.description]
+        
+        result = [dict(zip(columns, row)) for row in rows]
+        
         conn.close()
-    
-        return rows
-
-
+        
+        return result
 
     
 
