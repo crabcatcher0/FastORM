@@ -4,35 +4,49 @@
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-6">
-            <div class="card bg-dark text-light" style="border: none;">
-                <div class="text-center mb-3">
+            <div class="card bg-dark text-light border-0">
+                <div class="card-header text-center mb-3 border-0">
                     <h4>Welcome {{ full_name }}</h4>
                     <a href="/logout" class="btn btn-danger">Logout</a>
                 </div>
                 <div class="card-body">
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-4">
-                            <label class="form-label mb-0">First Name:</label>
+                    {% for field, value in [('First Name', first_name), ('Last Name', last_name), ('Email', email)] %}
+                        <div class="row mb-3 align-items-center">
+                            <div class="col-md-4">
+                                <label class="form-label mb-0">{{ field }}:</label>
+                            </div>
+                            <div class="col-md-8">
+                                <p class="text-light bg-dark border border-secondary rounded-3 p-2 mb-0">{{ value }}</p>
+                            </div>
                         </div>
-                        <div class="col-md-8">
-                            <p class="text-light bg-dark" style="border: 1px solid #6c757d; background: transparent; padding: 0.5rem; margin-bottom: 0;">{{ first_name }}</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-4">
-                            <label class="form-label mb-0">Last Name:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p class="text-light bg-dark" style="border: 1px solid #6c757d; background: transparent; padding: 0.5rem; margin-bottom: 0;">{{ last_name }}</p>
-                        </div>
-                    </div>
-                    <div class="row mb-3 align-items-center">
-                        <div class="col-md-4">
-                            <label class="form-label mb-0">Email:</label>
-                        </div>
-                        <div class="col-md-8">
-                            <p class="text-light bg-dark" style="border: 1px solid #6c757d; background: transparent; padding: 0.5rem; margin-bottom: 0;">{{ email }}</p>
-                        </div>
+                    {% endfor %}
+
+                    <div class="mt-4">
+                        <h5 class="text-light">My Reviews</h5>
+                        {% if rev %}
+                            {% for review in rev %}
+                                <div class="mb-3 p-3 border rounded bg-dark">
+                                    <p class="mb-1 text-light" style="font-size: 14px;">{{ review.comments|truncate(50) }}</p>
+                                    <button class="btn btn-secondary text-light btn-sm" data-bs-toggle="modal" data-bs-target="#reviewModal-{{ review.id }}">Read more</button>
+                                </div>
+                                <div class="modal fade" id="reviewModal-{{ review.id }}" tabindex="-1" aria-labelledby="reviewModalLabel-{{ review.id }}" aria-hidden="true">
+                                    <div class="modal-dialog modal-dialog-centered">
+                                        <div class="modal-content bg-dark text-light border-0">
+                                            <div class="modal-header border-0">
+                                                <h5 class="modal-title" id="reviewModalLabel-{{ review.id }}">Review Details</h5>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <p>{{ review.comments }}</p>
+                                                <p style="font-size: 12px;">Posted on: {{ review.created_at }}</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <p class="text-center text-light">No reviews yet. You haven’t reviewed any products.</p>
+                        {% endif %}
                     </div>
                 </div>
             </div>

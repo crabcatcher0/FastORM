@@ -4,34 +4,36 @@
 <div class="container mt-5">
     <div class="row">
         <div class="col-md-8 mx-auto">
-            <div class="card mb-4">
-                <div class="card-body">
-                    <h4 class="card-title text-left" style="font-size: 24px; font-weight: bold;">{{ product.title }}</h4>
-                    <h5 class="text-muted text-left" style="font-size: 18px;">Company: {{ product.made_by }}</h5>
-                    <p class="text-center mt-3">{{ product.description }}</p>
+            <div class="card mb-4" style="overflow: hidden; border: 1px solid blue;">
+                <div class="card-body bg-dark" style=" padding: 30px;">
+                    <h4 class="card-title text-left" style="font-size: 24px; font-weight: bold; color: white;">{{ product.title }}</h4>
+                    <h5 class="text-left" style="font-size: 18px; color: #bdbaba;">Company: {{ product.made_by }}</h5>
                 </div>
             </div>
 
             <div class="card mb-4">
                 <div class="card-header d-flex justify-content-between align-items-center">
-                    <h4 class="mb-0">Product Reviews</h4>
+                    <h4 class="mb-0">Reviews</h4>
                     <a href="/review-form?product_id={{ product.id }}" class="btn btn-primary">Post Review</a>
                 </div>
                 <div class="card-body">
+                    <div class="dropdown">
+                        <button class="btn btn-secondary dropdown-toggle btn-sm" type="button" id="sortDropdown" data-bs-toggle="dropdown" aria-expanded="false" style="font-size: 0.875rem; padding: 0.25rem 0.5rem;">
+                            Sort by
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="sortDropdown">
+                            <li><a class="dropdown-item" href="?sort=newest">Newest</a></li>
+                            <li><a class="dropdown-item" href="?sort=oldest">Oldest</a></li>
+                        </ul>
+                    </div>
+                </div>
                     {% if reviews %}
                         {% for review in reviews %}
                             <div class="mb-4 p-3 border rounded">
-                                <h5 class="font-weight-bold">{{ review.comments }}</h5>
-                                <p class="mb-1 text-muted" style="font-size: 12px;">Reviewed by: {{ review.review_by }}</p>
-                                <p class="text-muted" style="font-size: 12px;">Posted on: {{ review.created_at }}</p>
+                                <p style="font-size: 12px;">{{ review.comments }}</p>
+                                <p class="mb-1 text-muted" style="font-size: 12px;">By: {{ review.review_by }} | {{ review.created_at }}</p>
                                 <div class="d-flex justify-content-between align-items-center">
-                                    <div>
-                                        <button class="btn btn-success btn-sm" data-review-id="{{ review.id }}">Upvote</button>
-                                        <button class="btn btn-danger btn-sm" data-review-id="{{ review.id }}">Downvote</button>
-                                    </div>
-                                    <span class="badge badge-secondary">Votes: {{ review.votes }}</span>
                                 </div>
-                                <hr>
                             </div>
                         {% endfor %}
                     {% else %}

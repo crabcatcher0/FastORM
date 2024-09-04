@@ -129,14 +129,22 @@ def logout():
 
 @app.get("/profile")
 @login_required
-async def profile(request: Request, current_user: User = Depends(get_current_user)):
+async def profile(
+    request: Request, 
+    current_user: User = Depends(get_current_user)
+    ):
+
     full_name = f"{current_user.first_name} {current_user.last_name}"
+    review_data = Review.filter_data(model='review', field='review_by', value=current_user.email)
+
     template = env.get_template('profile.html')
     return HTMLResponse(content=template.render(
         full_name=full_name,
         first_name=current_user.first_name,
         last_name=current_user.last_name,
-        email=current_user.email
+        email=current_user.email,
+        rev = review_data
+        
     ))
 
 
