@@ -10,7 +10,8 @@ from .auth.utils import get_password_hash, verify_password
 from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token
 from .auth.decorators import login_required
 import logging
-from orm.get_data import GetData
+
+
 
 
 app = FastAPI()
@@ -195,6 +196,22 @@ async def review(request: Request, comments: str = Form(...)):
     
     return RedirectResponse("/success", status_code=303)
 
+
+
+@app.get('/sort')
+def sort_post(sort: str = Query("newest")):
+    data = productserializer(
+        model='product',
+        fields=('id', 'title', 'made_by', 'created_at')
+    )
+    if sort == "newest":
+        sorted_data = sorted(data, key=lambda post: post['created_at'], reverse=True)
+    elif sort == "oldest":
+        sorted_data = sorted(data, key=lambda post: post['created_at'])
+    else:
+        sorted_data = data
+    
+    return sorted_data
 
 
 
