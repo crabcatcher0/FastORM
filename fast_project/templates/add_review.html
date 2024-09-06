@@ -2,8 +2,10 @@
 
 {% block content %}
 <form method="POST" action="/review" class="container py-5">
+    <input type="hidden" name="product_id" value="{{ product_id }}">
     <div class="mb-3">
         <label for="comments" class="form-label">Review</label>
+        
         <textarea class="form-control" id="comments" name="comments" rows="4" 
         placeholder="Please give your honest review..." required></textarea>
     </div>

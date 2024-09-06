@@ -4,10 +4,10 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from .templating import env
 from .models import Product, User, Review
-from .serializer import productserializer, oneserializer, reviewserializere
+from .serializer import productserializer, oneserializer, for_review
 from .fast_utils import search_products
 from .auth.utils import get_password_hash, verify_password
-from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token
+from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token, oauth2_scheme
 from .auth.decorators import login_required
 import logging
 
@@ -172,28 +172,26 @@ async def review_form(
 
 
 @app.post("/review")
-async def review(request: Request, comments: str = Form(...)):
-    prods = productserializer('product', ('id', 'title'))
-    ss = {'data':prods}
-
-    for pk in ss["data"]:
-        result = pk['id']
+async def review(
+    request: Request,
+    product_id: int = Form(...),
+    comments: str = Form(...)
+    ):
 
     token = request.cookies.get('access_token')
     if not token:
         raise HTTPException(status_code=401, detail="Access token is missing")
-
+    
     email = get_email_from_token(token)
     if not email:
-        raise HTTPException(status_code=401, detail="Invalid token or email not found")
-
+        raise HTTPException(status_code=401, detail='Not found email...')
+    
     data = {
-        'review_by' : email,
-        'in_product' : result,
+        'review_by': email,
+        'in_product': product_id,
         'comments': comments
     }
     Review.add_data(data)
-    
     return RedirectResponse("/success", status_code=303)
 
 
