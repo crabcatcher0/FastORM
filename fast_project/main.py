@@ -1,7 +1,6 @@
 from fastapi import FastAPI, Form, HTTPException, status, Query, Depends, Request
-from datetime import timedelta
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
+from fastapi.responses import RedirectResponse, HTMLResponse
 from .templating import env
 from .models import Product, User, Review
 from .serializer import productserializer, oneserializer
