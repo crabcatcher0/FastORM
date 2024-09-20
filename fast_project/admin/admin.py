@@ -5,7 +5,7 @@ from fastapi.security import OAuth2PasswordBearer
 from fastapi import Depends, HTTPException, Request
 from fast_project.models import User
 from jwt import PyJWTError
-from .secrete import ACCESS_TOKEN_EXPIRE_MINUTES,  ALGORITHM, SECRETE_KEY
+from .secrete import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRETE_KEY
 
 
 def create_admin_token(data: dict):
@@ -16,7 +16,6 @@ def create_admin_token(data: dict):
     return encode_jwt
 
 
-
 def decode_admin_token(token: str):
     try:
         payload = jwt.decode(token, SECRETE_KEY, algorithms=[ALGORITHM])
@@ -25,6 +24,3 @@ def decode_admin_token(token: str):
         raise HTTPException(status_code=401, detail="Token Expired.")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Token invalid.")
-
-
-

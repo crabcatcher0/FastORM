@@ -34,16 +34,15 @@ def decode_access_token(token: str):
         raise HTTPException(status_code=401, detail="Token Expired.")
     except jwt.PyJWTError:
         raise HTTPException(status_code=401, detail="Token invalid")
-    
 
 
 def get_current_user(request: Request):
     token = request.cookies.get("access_token")
     if not token:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+
     token = token.replace("Bearer ", "")
-    
+
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
         email = payload.get("sub")
@@ -53,12 +52,12 @@ def get_current_user(request: Request):
         return user
     except PyJWTError:
         raise HTTPException(status_code=401, detail="Unauthorized")
-    
+
 
 def get_email_from_token(token: str):
     try:
         token = token.replace("Bearer ", "")
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return payload.get("sub") 
+        return payload.get("sub")
     except PyJWTError:
         return None
