@@ -1,44 +1,33 @@
 class DataTypes:
     """
     : Datatypes
-    """    
-    
+    """
+
     @staticmethod
     def varchar(max_length=255, unique=False):
         unique_const = "UNIQUE" if unique else ""
-        return f'VARCHAR({max_length}) NOT NULL {unique_const}'.strip()
-
+        return f"VARCHAR({max_length}) NOT NULL {unique_const}".strip()
 
     @staticmethod
     def integer():
-        return 'INTEGER NOT NULL'
-
+        return "INTEGER NOT NULL"
 
     @staticmethod
     def boolean():
-        return 'BOOLEAN'
-
+        return "BOOLEAN"
 
     @staticmethod
-    def emailfield(unique = True):
+    def emailfield(unique=True):
         if unique:
-            return 'VARCHAR(255) UNIQUE NOT NULL'
+            return "VARCHAR(255) UNIQUE NOT NULL"
         else:
-            return 'VARCHAR(255) UNIQUE NOT NULL'
-    
+            return "VARCHAR(255) UNIQUE NOT NULL"
 
     @staticmethod
     def datetimefield(auto_add_now=True):
         if auto_add_now:
-            return  'DATETIME DEFAULT CURRENT_TIMESTAMP'
-        
-        
+            return "DATETIME DEFAULT CURRENT_TIMESTAMP"
+
     @staticmethod
     def imagefield():
         return "BLOB"
-    
-    
-        
-
-
-
