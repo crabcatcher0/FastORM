@@ -17,11 +17,5 @@ def oneserializer(model, fields, pk):
     return serialized
 
 
-def reviewserializere():
-    serialized = Serializer.all_data(
-        model='review',
-        fields=('id', 'review_by', 'in_product', 'comments')
-    )
-    return serialized
 
 

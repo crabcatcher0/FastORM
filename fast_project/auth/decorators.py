@@ -1,5 +1,6 @@
 from functools import wraps
-from fastapi import HTTPException
+from fastapi import HTTPException, Depends
+from .jwt_handlers import get_current_user
 
 
 def login_required(func):

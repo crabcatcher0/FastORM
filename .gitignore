@@ -8,6 +8,7 @@ __pycache__/
 *.py[cod]
 *$py.class
 test.db
+.env/
 # C extensions
 *.so
 venv/

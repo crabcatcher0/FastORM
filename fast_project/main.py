@@ -4,12 +4,14 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse, JSONResponse
 from .templating import env
 from .models import Product, User, Review
-from .serializer import productserializer, oneserializer, for_review
+from .serializer import productserializer, oneserializer
 from .fast_utils import search_products
 from .auth.utils import get_password_hash, verify_password
-from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token, oauth2_scheme
+from .auth.jwt_handlers import create_access_token, get_current_user, get_email_from_token
 from .auth.decorators import login_required
 import logging
+from starlette.status import HTTP_401_UNAUTHORIZED
+
 
 
 
@@ -86,7 +88,7 @@ async def register(
         'password': hashed_password
     }
     User.add_data(user)
-    return RedirectResponse("/success", status_code=303)
+    return RedirectResponse("/login", status_code=303)
 
 
 @app.get("/register-form")
@@ -134,7 +136,6 @@ async def profile(
     request: Request, 
     current_user: User = Depends(get_current_user)
     ):
-
     full_name = f"{current_user.first_name} {current_user.last_name}"
     review_data = Review.filter_data(model='review', field='review_by', value=current_user.email)
 
@@ -171,6 +172,7 @@ async def review_form(
     return HTMLResponse(content=template.render({"request": request, "product_id": product_id}))
 
 
+
 @app.post("/review")
 async def review(
     request: Request,
@@ -192,22 +194,22 @@ async def review(
         'comments': comments
     }
     Review.add_data(data)
-    return RedirectResponse("/success", status_code=303)
+    return RedirectResponse("/crm", status_code=303)
 
 
 
-@app.get('/sort')
+@app.get('/sorted')
 def sort_post(sort: str = Query("newest")):
-    data = productserializer(
+    reviews = productserializer(
         model='product',
         fields=('id', 'title', 'made_by', 'created_at')
     )
     if sort == "newest":
-        sorted_data = sorted(data, key=lambda post: post['created_at'], reverse=True)
+        sorted_data = sorted(reviews, key=lambda post: post['created_at'], reverse=True)
     elif sort == "oldest":
-        sorted_data = sorted(data, key=lambda post: post['created_at'])
+        sorted_data = sorted(reviews, key=lambda post: post['created_at'])
     else:
-        sorted_data = data
+        sorted_data = reviews
     
     return sorted_data
 
@@ -216,4 +218,5 @@ def sort_post(sort: str = Query("newest")):
 @app.get("/success")
 def success():
     return HTMLResponse(content="<h1>Student added successfully!</h1>")
+
 
