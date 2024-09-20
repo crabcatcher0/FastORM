@@ -14,8 +14,6 @@ from .auth.jwt_handlers import (
 )
 from .auth.decorators import login_required
 import logging
-from starlette.status import HTTP_401_UNAUTHORIZED
-from .schema import ProductSchema
 
 
 app = FastAPI()
