@@ -1,17 +1,23 @@
-from fastapi import FastAPI, Form, HTTPException, status, Query, Depends, Request
+from fastapi import FastAPI
+from fastapi import Form
+from fastapi import HTTPException
+from fastapi import Query
+from fastapi import Depends
+from fastapi import Request
 from fastapi.staticfiles import StaticFiles
 from fastapi.responses import RedirectResponse, HTMLResponse
-from .templating import env
-from .models import Product, User, Review
-from .serializer import productserializer, oneserializer
-from .fast_utils import search_products
-from .auth.utils import get_password_hash, verify_password
-from .auth.jwt_handlers import (
-    create_access_token,
+
+from fast_project.templating import env
+from fast_project.models import Product, User, Review
+from fast_project.serializer import productserializer, oneserializer #type: ignore
+from fast_project.fast_utils import search_products
+from fast_project.auth.utils import get_password_hash, verify_password
+from fast_project.auth.jwt_handlers import (
+    create_access_token, #type: ignore
     get_current_user,
     get_email_from_token,
 )
-from .auth.decorators import login_required
+from fast_project.auth.decorators import login_required #type: ignore
 import logging
 
 
@@ -76,7 +82,7 @@ async def register(
         "password": hashed_password,
     }
     User.add_data(user)
-    return RedirectResponse("/login", status_code=303)
+    return RedirectResponse("/login")
 
 
 @app.get("/register-form")

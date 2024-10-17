@@ -3,8 +3,7 @@ from datetime import datetime, timedelta
 from .secrete import ACCESS_TOKEN_EXPIRE_MINUTES, ALGORITHM, SECRET_KEY
 from fastapi.exceptions import HTTPException
 from fastapi.security import OAuth2PasswordBearer
-from functools import wraps
-from fastapi import Depends, HTTPException, Request
+from fastapi import HTTPException, Request
 from fast_project.models import User
 from jwt import PyJWTError
 

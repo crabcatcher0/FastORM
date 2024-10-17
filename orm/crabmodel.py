@@ -1,5 +1,5 @@
 import sqlite3
-from .settings import DATABASE_NAME
+from orm.settings import DATABASE_NAME
 
 
 class CrabModel:
